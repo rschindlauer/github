@@ -199,6 +199,12 @@ Get contributors list with additions, deletions, and commit counts.
 repo.contributors(function(err, data) {});
 ```
 
+Get all milestones.
+
+```js
+repo.getMilestones(function(err, data) {});
+```
+
 ## User API
 
 
@@ -311,6 +317,12 @@ To read all the issues of a given repository
 
 ```js
 issues.list(options, function(err, issues) {});
+```
+
+To read a specific issue
+
+```js
+var issues = github.getIssue(username, reponame, issueNumber, function(err, issues) {});
 ```
 
 ##Setup

@@ -80,6 +80,14 @@ test("Repo API", function(t) {
         });
     });
 
+    t.test('repo.getMilestones', function(q) {
+        github.getRepo('rschindlauer', 'github')
+          .getMilestones(function(err, milestones) {
+            q.error(err, 'get milestones error: ' + err);
+            q.end();
+        });
+    });
+
     clearTimeout(timeout);
     t.end();
 
@@ -144,7 +152,7 @@ test('delete Repo', function(t) {
     auth: "basic"
   });
   var repo = github.getRepo(test_user.USERNAME, repoTest);
-  
+
   repo.deleteRepo(function(err, res) {
     t.error(err);
     t.equals(res, true, 'Repo Deleted');
