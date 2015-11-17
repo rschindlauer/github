@@ -729,15 +729,24 @@
           _request("GET", url, null, cb);
       };
 
-        // Get milestones
-        // -------
+      // Get milestones
+      // -------
 
-        this.getMilestones = function(cb) {
-          _requestAllPages(repoPath + "/milestones", function(err, res) {
-            cb(err, res);
-          });
-        };
+      this.getMilestones = function(cb) {
+        _requestAllPages(repoPath + "/milestones", function(err, res) {
+          cb(err, res);
+        });
+      };
 
+      // Get labels
+      // -------
+
+      this.getLabels = function(cb) {
+        _requestAllPages(repoPath + "/labels", function(err, res) {
+          cb(err, res);
+        });
+      };
+      
     };
 
     // Gists API
