@@ -102,7 +102,12 @@
             return cb(err);
           }
 
-          results.push.apply(results, res);
+          // add logic to process github search results
+          if (res.hasOwnProperty("items")) {
+            results.push.apply(results, res.items);
+          } else {
+            results.push.apply(results, res);
+          }
 
           var links = (xhr.getResponseHeader('link') || '').split(/\s*,\s*/g),
               next = null;
@@ -746,7 +751,7 @@
           cb(err, res);
         });
       };
-      
+
     };
 
     // Gists API
@@ -861,6 +866,31 @@
 
       _request("GET", path, null, cb);
     };
+
+    // Search all issues
+    // --------
+
+    Github.SearchIssue = function(options) {
+      var path = "/search/issues";
+      path += "?q=";
+      path += encodeURIComponent("repo:" + options.user + "/" + options.repo);
+
+      this.list = function(options, cb) {
+        var query = [];
+        query.push(encodeURIComponent("state:open"));
+        for (var key in options) {
+          if (options.hasOwnProperty(key)) {
+            if (key == "kw") {
+              query.push(encodeURIComponent(options[key]));
+            } else {
+              query.push(encodeURIComponent(key + ":" + options[key]));
+            }
+          }
+        }
+        _requestAllPages(path + '+' + query.join("+"), cb);
+      };
+    };
+
     // Top Level API
     // -------
 
@@ -870,6 +900,10 @@
 
     this.getIssue = function(user, repo, id, cb) {
       return new Github.SingleIssue({user: user, repo: repo, id: id}, cb);
+    };
+
+    this.searchIssues = function(user, repo) {
+      return new Github.SearchIssue({user: user, repo: repo});
     };
 
     this.getRepo = function(user, repo) {
